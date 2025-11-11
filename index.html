@@ -472,15 +472,7 @@ mindar-image="imageTargetSrc: https://soledad-y-caos-uddf.vercel.app/assets/targ
       document.getElementById('play-pause-btn').innerHTML = '<i class="fas fa-pause"></i>';
     });
 
-    document.getElementById('mute-btn').addEventListener('click', function() {
-      const activeVideo = getActiveVideo();
-      if (!activeVideo) return;
-      
-      activeVideo.muted = !activeVideo.muted;
-      this.innerHTML = activeVideo.muted ? 
-        '<i class="fas fa-volume-mute"></i>' : 
-        '<i class="fas fa-volume-up"></i>';
-       document.getElementById('mute-btn').addEventListener('click', function() {
+   document.getElementById('mute-btn').addEventListener('click', function() {
   const activeVideo = getActiveVideo();
   if (!activeVideo) return;
 
