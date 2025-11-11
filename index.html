@@ -110,13 +110,11 @@
   </div>
 
   <a-scene
-    embedded
     vr-mode-ui="enabled: false"
-    device-orientation-permission-ui="enabled: true"
-    mindar-image="imageTargetSrc: https://soledad-y-caos-uddf.vercel.app/assets/targets.mind; filterMinCF: 0.001; filterBeta: 0.01;"
+    device-orientation-permission-ui="enabled: false"
+    mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/josuejosue2002004-8478/soledad-y-caos-uddf@main/assets/targets.mind; filterMinCF: 0.001; filterBeta: 0.01;"
     color-space="sRGB"
     renderer="colorManagement: true, physicallyCorrectLights"
->
   >
     <a-assets>
       <!-- Videos, Masks, and Frames -->
@@ -159,7 +157,6 @@
       init: function() {
         const el = this.el;
         const maskImg = this.data.mask;
-mindar-image="imageTargetSrc: https://soledad-y-caos-uddf.vercel.app/assets/targets.mind; filterMinCF: 0.001; filterBeta: 0.01;"
 
         // Esperar a que el componente esté listo
         el.addEventListener('loaded', () => {
@@ -257,32 +254,32 @@ mindar-image="imageTargetSrc: https://soledad-y-caos-uddf.vercel.app/assets/targ
         markerGroupId: 'markerGroup0',
 
         // Global
-        globalScale: 1.51,
+        globalScale: 1.2,
         globalPositionX: 0,
         globalPositionY: 0,
         globalPositionZ: 0,
         
         // Video
-        videoScale: 2.42,
+        videoScale: 1.32,
         videoPositionX: 0,
         videoPositionY: 0,
         videoPositionZ: 0.02,
         
         // Frame/Overlay
-        overlayScale: 1.85,
+        overlayScale: 1.4,
         framePositionX: 0,
         framePositionY: 0,
         framePositionZ: 0.05,
         
         // Mask
-        maskScale: 0.78,
+        maskScale: 1,
         maskPositionX: 0,
         maskPositionY: 0,
 
         // Rotation
         rotationMin: 0,
         rotationMax: 20,
-        rotationSpeed: 3.7
+        rotationSpeed: 0.5
       }
     ];
 
@@ -472,25 +469,14 @@ mindar-image="imageTargetSrc: https://soledad-y-caos-uddf.vercel.app/assets/targ
       document.getElementById('play-pause-btn').innerHTML = '<i class="fas fa-pause"></i>';
     });
 
-   document.getElementById('mute-btn').addEventListener('click', function() {
-  const activeVideo = getActiveVideo();
-  if (!activeVideo) return;
-
-  activeVideo.muted = !activeVideo.muted;
-  this.innerHTML = activeVideo.muted
-    ? '<i class="fas fa-volume-mute"></i>'
-    : '<i class="fas fa-volume-up"></i>';
-});
-
-// 🟢 Forzar reproducción tras primer toque (móviles)
-document.body.addEventListener('click', () => {
-  configs.forEach(({ vidId }) => {
-    const vid = document.getElementById(vidId);
-    if (vid && vid.paused) vid.play();
-  });
-}, { once: true });
-
-
+    document.getElementById('mute-btn').addEventListener('click', function() {
+      const activeVideo = getActiveVideo();
+      if (!activeVideo) return;
+      
+      activeVideo.muted = !activeVideo.muted;
+      this.innerHTML = activeVideo.muted ? 
+        '<i class="fas fa-volume-mute"></i>' : 
+        '<i class="fas fa-volume-up"></i>';
     });
   </script>
 </body>
