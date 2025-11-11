@@ -149,54 +149,44 @@
 
   <script>
     // Componente personalizado para aplicar máscara al video
-    setupMask: function() {
-  const el = this.el;
-  const maskImg = this.data.mask;
+    AFRAME.registerComponent('video-mask', {
+      schema: {
+        mask: { type: 'selector' }
+      },
 
-  // Obtener el elemento de video asociado
-  const videoSrc = el.getAttribute('src');
-  const video = document.querySelector(videoSrc);
+      init: function() {
+        const el = this.el;
+        const maskImg = this.data.mask;
 
-  if (!video) {
-    console.warn('No se encontró el video para aplicar la máscara.');
-    return;
-  }
+        // Esperar a que el componente esté listo
+        el.addEventListener('loaded', () => {
+          this.setupMask();
+        });
+      },
 
-  // Crear texturas para el video y la máscara
-  const videoTexture = new THREE.VideoTexture(video);
-  const maskTexture = new THREE.TextureLoader().load(maskImg.src);
+      setupMask: function() {
+        const el = this.el;
+        const maskImg = this.data.mask;
+        
+        // Obtener el video element
+        const videoSrc = el.getAttribute('src');
+        const video = document.querySelector(videoSrc);
 
-  // Crear material con máscara mediante un shader personalizado
-  const material = new THREE.ShaderMaterial({
-    uniforms: {
-      videoTexture: { value: videoTexture },
-      maskTexture: { value: maskTexture },
-    },
-    vertexShader: `
-      varying vec2 vUV;
-      void main() {
-        vUV = uv;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-      }
-    `,
-    fragmentShader: `
-      varying vec2 vUV;
-      uniform sampler2D videoTexture;
-      uniform sampler2D maskTexture;
+        // Crear textura de máscara
+        const maskTexture = new THREE.TextureLoader().load(maskImg.src);
+        maskTexture.needsUpdate = true;
+        
+        // Crear textura de video
+        const videoTexture = new THREE.VideoTexture(video);
+        videoTexture.minFilter = THREE.LinearFilter;
+        videoTexture.magFilter = THREE.LinearFilter;
 
-      void main() {
-        vec4 videoColor = texture2D(videoTexture, vUV);
-        vec4 maskColor = texture2D(maskTexture, vUV);
-        gl_FragColor = vec4(videoColor.rgb, videoColor.a * maskColor.r);
-      }
-    `,
-    transparent: true,
-  });
-
-  // Asignar material al mesh del elemento
-  el.getObject3D('mesh').material = material;
-}
-
+        // Esperar a que el mesh esté disponible
+        setTimeout(() => {
+          const mesh = el.getObject3D('mesh');
+          if (!mesh) {
+            console.error('No se encontró el mesh');
+            return;
           }
 
           // Obtener la configuración de este marcador
@@ -270,7 +260,7 @@
         globalPositionZ: 0,
         
         // Video
-        videoScale: 1.43,
+        videoScale: 1.44,
         videoPositionX: 0,
         videoPositionY: 0,
         videoPositionZ: 0.02,
@@ -288,8 +278,8 @@
 
         // Rotation
         rotationMin: 0,
-        rotationMax: 64,
-        rotationSpeed: 4.8
+        rotationMax: 35,
+        rotationSpeed: 0.3
       }
     ];
 
